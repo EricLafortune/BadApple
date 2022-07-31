@@ -1,0 +1,160 @@
+# LPC frames (voiced, unvoiced, repeat, silence, stop) for the TMS5200 speech
+# synthesizer in a simple text format.
+#
+# The phrase "Texas Instruments Home Computer" from the built-in vocabulary,
+# but with the lengths tweaked so they can be tuned to the first line of the
+# "Bad Apple" vocals.
+
+# "Texas Instruments"
+
+                # Pitch 2e
+7 2aa65
+7 26895
+d 24 4172b0f112 # "e"
+e 24 4274acf15e
+e 24 46948cf1a5
+d 24 4b726cb164
+7 27 424e08b31c
+6 24 6a3b4c269a
+
+                # Pitch 2b
+6 3f455
+7 00
+7 3f662
+b 20 7f52886c9f # "a"
+d 27 4594cc8deb
+d 26 4574ce6fe3
+d 26 45b2ce2fe4
+b 27 68e92c8d35
+7 3cc34
+6 00
+#7 00
+#5 00
+
+                # Pitch 29
+d 26 49d4b0479b # "i"
+d 27
+d 27
+c 28
+c 28 # added
+c 28 # added
+b 28 396536555e
+8 2a
+
+                # Pitch 27
+8 3d780
+7 00
+7 3d570
+1 1845a
+4 28e06
+8 31478
+d 2c 45cee8b0e6 # "u"
+d 2c
+9 2e 31cce90aa7
+
+                # Pitch 24
+9 2f 2daee8cced
+a 2f 39f540f0e3
+b 31
+b 31 # added
+b 31 # added
+b 31 # added
+b 31 # added
+b 31 # added
+b 31 # added
+b 31 # added
+a 32 3dd5070f29 # "e"
+6 33 35cb0e131d
+#6 32
+#5 32 # added
+#5 33 # added
+#5 32 # added
+#4 33
+4 35 49ccd02f23
+5 32836
+6 3f450
+#7 00
+4 3cf12
+#4 00
+5 3f401
+
+# "home"
+
+                # Pitch 1d
+1 151d9
+2 1b0ab
+#2 00
+2 151d9
+2 22 25ffa4ab2e # "o"
+#b 22
+#b 23
+#b 23
+b 24 2d3becc0af
+#c 25
+#b 26
+#b 2a
+b 2b 3d1175e01d
+#b 2c
+#b 2c
+b 2d 42071302cd
+#b 2e
+#a 2e
+#a 2e
+#9 2e
+#9 2e
+7 2e 2da3ae90e5
+6 2d 2a56d0a962
+#4 2e 2e96c8f50c
+
+# "computer"
+
+                # Pitch 20
+5 213c4
+6 00
+e 2a 45cf2f016d # "o"
+d 2a
+c 2a # added
+b 2b
+a 2b 36694a852c
+6 2d
+1 31
+
+                # Pitch 24
+4 0d089
+8 25351
+6 00
+e 24 5250a0ed7c # "u"
+d 24
+d 24 # added
+d 24 # added
+d 24 # added
+d 24 # added
+d 25 41cd28d13c
+c 26
+c 26 # added
+c 26 # added
+c 26 # added
+c 26 # added
+
+                # Pitch 2e
+7 2eb88
+9 2a 3ecb256d6d # "e"
+c 2a
+c 2d
+c 2f
+c 2f # added
+c 2f # added
+c 2f # added
+c 2f # added
+c 2f # added
+c 2f # added
+c 2f # added
+c 2f # added
+b 2f 3acaabb12f
+8 30 36e6f9452b
+7 30 36a4f2eceb
+6 30 422d24af2a
+
+# Stop frame.
+
+f
