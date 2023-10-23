@@ -3,8 +3,7 @@
 # This script launches Mame with the TI-99/4A, the speech synthesizer, and
 # the Bad Apple cartridge mounted.
 
-
-RPK=out/BadApple.rpk
+RPK=out/BadApple_pal.rpk
 
 if [ ! -f $RPK ]
 then
