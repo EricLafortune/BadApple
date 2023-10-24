@@ -5,6 +5,36 @@ shadow-art [animation video](https://www.youtube.com/watch?v=G3C-VevI36s) that
 runs as a demo on many computer platforms. This is another version for the
 TI-99/4A home computer.
 
+## Screenshots
+
+![Title screen](screenshots/BadApple1.png)
+![Animation](screenshots/BadApple2.png)
+![Animation](screenshots/BadApple3.png)
+![Animation](screenshots/BadApple4.png)
+![Animation](screenshots/BadApple5.png)
+![Animation](screenshots/BadApple6.png)
+![Credits](screenshots/BadApple7.png)
+![Post-credits](screenshots/BadApple8.png)
+
+You can watch the full [video](https://youtu.be/vx__aAdm4wQ) on Youtube.
+
+## Features
+
+* Data: 4.5 MB in cartridge ROM.
+* Player code: 394 bytes of assembly (TMS990 processor).
+* Animation: 256x192 pixels at 25 fps (TMS9918 video processor).
+* Sound: chiptune at 50 fps (TMS9919/SN76489 sound processor).
+* Vocals: linear predictive coding at 40 fps (TMS5200 speech synthesizer).
+
+## Requirements
+
+* TI-99/4A home computer.
+* A programmable cartridge with at least 4.5 MB of ROM/RAM.
+
+or:
+
+* An emulator for the TI-99/4A, such as Mame.
+
 ## Downloading
 
 You can download the [latest
@@ -22,10 +52,11 @@ as well.
   the titles.
 * The `ffmpeg` video converter (Debian package `ffmpeg`), for extracting
   the video frames.
-* The [Praat](https://www.fon.hum.uva.nl/praat/) phonetics program (Debian
-  package `praat`), for computing the speech coefficients.
+* The `sox` sound tool (Debian package `sox`), for converting the speech audio
+  files.
 * My [video tools](https://github.com/EricLafortune/VideoTools/) for the
-  TI-99/4A, for tying the animation, music, and vocals together.
+  TI-99/4A, for computing the speech coefficients and for tying the animation,
+  music, and vocals together.
 * The [xdt99](https://github.com/endlos99/xdt99) cross-development tools, for
   assembling the final video player.
 
@@ -53,19 +84,19 @@ You'll then have
 
 ## Running
 
-The easiest way is to use the Mame emulator.
+The easiest way is to use the Mame emulator (version 0.243 or higher).
 
 On Linux, you can run the script to launch Mame with the proper options:
 
     ./run.sh
 
 Alternatively, you can run the Mame command manually. Remember that the
-demo targets a European system, with a display at 50 Hz. 
+demo targets a European system, with a display at 50 Hz.
 
 Once Mame is running and showing the TI-99/4A home screen:
 
 1. Press any key.
-2. Press `1` for "BAD APPLE" or `2` for "BAD APPLE WITH VOCALS".
+2. Press `2` for "BAD APPLE" or `3` for "BAD APPLE WITH VOCALS".
 
 You can exit Mame by pressing `Insert` and then `Esc`.
 
@@ -92,34 +123,31 @@ processor.
 
 The *vocals* were available as a sound file. I've converted them to linear
 predictive coding (LPC) speech coefficients at 40 fps, using the
-[Praat](https://www.fon.hum.uva.nl/praat/) phonetics program. The video tools
-convert and quantize the coefficients to make them suitable for the speech
-synthesizer. The extracted vocals have a lot of echo/reverb/overdub, which
-makes them particularly hard to analyze and convert. I've therefore also
-created a tool to tune the speech coefficients, based on the frequencies in
-the chiptune. My apologies to the performer and to the listener if the result
-is still jarring -- I got carried away by the technological challenge.
+my own ConvertWavToLpcd tool from the video tools. It computes and quantizes
+the coefficients specifically for the speech synthesizer. The sound file has
+a lot of echo/reverb/overdub, which makes it particularly hard to analyze and
+convert. After a lot of tweaking, the current final result is fair.
 
 ## Other versions
 
 The animation is a hallmark test for retrocomputing. These are many versions
 for platforms from the 1980s.
 
-| Computer      | Developer                                                                                        | Video                                                | Processor       | Video processor | Sound processor   | Video performance      | Sound performance |
-|---------------|--------------------------------------------------------------------------------------------------|------------------------------------------------------|-----------------|-----------------|-------------------|------------------------|-------------------|
-| TI-99/4A      | [Tursi](https://atariage.com/forums/topic/331551-bad-apple-demo/?do=findComment&comment=5009503) | [video](https://www.youtube.com/watch?v=ZXyFuyKTAb4) | TMS9900 @ 3 MHz | TMS9918         | TMS9919           | 192x128 pixels @ 16 fps| PCM @ 13.8 kHz    |
-| TI-99/4A      | [Asmusr](https://atariage.com/forums/topic/338296-bad-apple-on-cartridge/?do=findComment&comment=5096661) |                                             | TMS9900 @ 3 MHz | TMS9918         | TMS9919           | VQ @ 15 fps            | /                 |
-| TI-99/4A      | Eric Lafortune                                                                                   |                                                      | TMS9900 @ 3 MHz | TMS9918         | TMS9919 + TMS5200 | 256x192 pixels @ 25 fps| Chiptune + vocals |
-| ZX Spectrum   | ?                                                                                                | [video](https://www.youtube.com/watch?v=cd5iEeIe7L0) | Z80 @ 3.5 MHZ   | ULA             | 2 x AY/YM         | 256×192 pixels         |                   |
-| C64           | [Algorithm](https://csdb.dk/scener/?id=10879) / [Onslaught](https://onslaught.c64.org/welcome)   | [video](https://www.youtube.com/watch?v=fu7rRYkWsyk) | 6510 @ 1 MHz    | VIC-II          | SID 6581          | VQ @ 12 fps            | Chiptune          |
-| MSX1          | [Pyhesti](https://www.pouet.net/user.php?who=104737)                                  | [video](https://homebrew.file-hunter.com/index.php?id=badapple) | Z80 @ 3.5 MHz   | TMS9918         | AY-3-8910         | VQ                     | Chiptune          |
-| MSX TurboR    | [Ryun](http://ryun.halfmoon.jp/msx/badapple/)                                                    | [video](https://www.youtube.com/watch?v=fdkBV9GjX30) | Z80 @ 3.5 MHz   | TMS9958         | AY-3-8910         | 256x192 pixels @ 30 fps| PCM @ 15.75 kHz   |
-| MSX TurboR    | [Yeongman Seo](http://sharksym.egloos.com/)                                                      | [video](https://www.youtube.com/watch?v=5920MuU9DQg) | Z80 @ 3.5 MHz   | TMS9958         | AY-3-8910         | 256x192 pixels @ 12 fps| PCM @ 11 kHz      |
-| BBC Micro     | [Bitshifters](https://bitshifters.github.io/posts/prods/bs-badapple.html)                        | [video](https://www.youtube.com/watch?v=8R4TiPSc7y0) | 6502 @ 2MHz     | SAA5050         | SN76489           | 40x25 chars @ 25 fps   | Chiptune @ 50 fps |
-| Intellivision | [Decle](https://atariage.com/forums/topic/266031-intellivision-bad-apple/)                       | [video](https://www.youtube.com/watch?v=tyknZvRQCaU) | CP1610 @ 895 kHz| AY-3-8900-1     | AY-3-8914         | 80x48 pixels @ 30 fps  |                   |
-| Sega Master System | [Psidum et al.](https://www.smspower.org/Homebrew/BadAppleForSMS-SMS)                       | [video](https://www.youtube.com/watch?v=8IrxK_nT1o8) | Z80 @ 3.59 MHz  | YM2602          | SN76489           | 256x192 pixels @ 25 fps|                   |
-| Sega Megadrive| ?                                                                                                | [video](https://www.youtube.com/watch?v=2vPe452cegU) | 68000 @ 7.6 MHz | YM7101          | YM2612            | 320x224 pixels @ 30 fps| ADPCM @ 13 kHz    |
-| NEC PC-6601   | タイニーP                                                                                          | [video](https://www.nicovideo.jp/watch/sm9280746)    | Z80 @ 4 MHz     | ìPD8049       | AY-3-8910 + µPD7752 | 256x192 pixels @ 9 fps | Chiptune + vocals |
+| Computer      | Developer                                                                                        | Video                                   | Processor       | Video processor | Sound processor   | Video performance      | Sound performance |
+|---------------|--------------------------------------------------------------------------------------------------|-----------------------------------------|-----------------|-----------------|-------------------|------------------------|-------------------|
+| TI-99/4A      | [Tursi](https://atariage.com/forums/topic/331551-bad-apple-demo/?do=findComment&comment=5009503) | [video](https://youtu.be/ZXyFuyKTAb4)   | TMS9900 @ 3 MHz | TMS9918         | TMS9919           | 192x128 pixels @ 16 fps| PCM @ 13.8 kHz    |
+| TI-99/4A      | [Asmusr](https://atariage.com/forums/topic/338296-bad-apple-on-cartridge/?do=findComment&comment=5096661) |                                | TMS9900 @ 3 MHz | TMS9918         | TMS9919           | VQ @ 15 fps            | /                 |
+| TI-99/4A      | Eric Lafortune                                                                                   |                                         | TMS9900 @ 3 MHz | TMS9918         | TMS9919 + TMS5200 | 256x192 pixels @ 25 fps| Chiptune + vocals |
+| ZX Spectrum   | ?                                                                                                | [video](https://youtu.be/cd5iEeIe7L0)   | Z80 @ 3.5 MHZ   | ULA             | 2 x AY/YM         | 256×192 pixels         |                   |
+| C64           | [Algorithm](https://csdb.dk/scener/?id=10879) / [Onslaught](https://onslaught.c64.org/welcome)   | [video](https://youtu.be/fu7rRYkWsyk)   | 6510 @ 1 MHz    | VIC-II          | SID 6581          | VQ @ 12 fps            | Chiptune          |
+| MSX1          | [Pyhesti](https://www.pouet.net/user.php?who=104737)                                             | [video](https://homebrew.file-hunter.com/index.php?id=badapple) | Z80 @ 3.5 MHz  | TMS9918 | AY-3-8910 | VQ              | Chiptune          |
+| MSX TurboR    | [Ryun](http://ryun.halfmoon.jp/msx/badapple/)                                                    | [video](https://youtu.be/fdkBV9GjX30)   | Z80 @ 3.5 MHz   | TMS9958         | AY-3-8910         | 256x192 pixels @ 30 fps| PCM @ 15.75 kHz   |
+| MSX TurboR    | [Yeongman Seo](http://sharksym.egloos.com/)                                                      | [video](https://youtu.be/5920MuU9DQg)   | Z80 @ 3.5 MHz   | TMS9958         | AY-3-8910         | 256x192 pixels @ 12 fps| PCM @ 11 kHz      |
+| BBC Micro     | [Bitshifters](https://bitshifters.github.io/posts/prods/bs-badapple.html)                        | [video](https://youtu.be/8R4TiPSc7y0)   | 6502 @ 2MHz     | SAA5050         | SN76489           | 40x25 chars @ 25 fps   | Chiptune @ 50 fps |
+| Intellivision | [Decle](https://atariage.com/forums/topic/266031-intellivision-bad-apple/)                       | [video](https://youtu.be/tyknZvRQCaU)   | CP1610 @ 895 kHz| AY-3-8900-1     | AY-3-8914         | 80x48 pixels @ 30 fps  |                   |
+| Sega Master System | [Psidum et al.](https://www.smspower.org/Homebrew/BadAppleForSMS-SMS)                       | [video](https://youtu.be/8IrxK_nT1o8)   | Z80 @ 3.59 MHz  | YM2602          | SN76489           | 256x192 pixels @ 25 fps|                   |
+| Sega Megadrive| ?                                                                                                | [video](https://youtu.be/2vPe452cegU)   | 68000 @ 7.6 MHz | YM7101          | YM2612            | 320x224 pixels @ 30 fps| ADPCM @ 13 kHz    |
+| NEC PC-6601   | タイニーP                                                                                        | [video](https://www.nicovideo.jp/watch/sm9280746) | Z80 @ 4 MHz | ìPD8049 | AY-3-8910 + µPD7752 | 256x192 pixels @ 9 fps | Chiptune + vocals |
 
 The demos all have different strengths. Versions with PCM audio render the
 original music and audio. Also notably, the BBC Micro version and the C64
@@ -137,7 +165,7 @@ originally for the [demo on the BBC Micro
 version](https://bitshifters.github.io/posts/prods/bs-badapple.html).
 
 _Secondary German_ extracted an acapella version of the song
-([video](https://www.youtube.com/watch?v=eViJlhkKU7Q),
+([video](https://youtu.be/eViJlhkKU7Q),
 [audio](https://mega.nz/file/POpWDYCB#7mFaV6jeYKtcEG_rfZVc4UG7bv0rYwQpbWE4viNJdYg)).
 
 ## License
