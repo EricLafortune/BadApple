@@ -103,7 +103,7 @@ copy_loop
     mov  *r0+, *r1+
     ci   r0, code_end
     jne  copy_loop
- clr r10
+
     b    @>8300
 
 code_start
@@ -126,7 +126,7 @@ bank_loop
     movb *r0, *r0              ; Switch to the current bank.
     inct r0                    ; Increment the bank index.
 
-    li   r1, >6000             ; Set the first frame.
+    li   r1, >6000             ; Set the first frame in this bank.
 
 * Render a frame (video, sound, and speech).
 frame_loop
@@ -144,7 +144,7 @@ frame_loop
 ;    movb *r1+, *r15            ;: d-
 ;    nop
 ;
-;video_loop                     ; Copy the video to VDP RAM.
+;video_loop                     ; Copy the frame to VDP RAM.
 ;    movb *r1+, *r14            ;: d-
 ;    dec  r2
 ;    jne  video_loop
@@ -162,7 +162,7 @@ frame_loop
     inc  r2
     b @unrolled_video_loop_end(r3)
 
-unrolled_video_loop            ; Copy the video to VDP RAM.
+unrolled_video_loop            ; Copy the frame to VDP RAM.
     movb *r1+, *r14            ;: d-
     movb *r1+, *r14            ;: d-
     movb *r1+, *r14            ;: d-
@@ -176,21 +176,21 @@ unrolled_video_loop_end
     jne  unrolled_video_loop
     jmp  frame_loop
 
-!   ai   r2, >0020             ; Did we get a sound video?
+!   ai   r2, >0020             ; Did we get a sound frame?
     jlt  !
 
 * Play subsequent bytes of sound data.
-sound_loop                     ; Copy the video to the sound processor.
+sound_loop                     ; Copy the frame to the sound processor.
     movb *r1+, *r13            ;: d-
     dec  r2
     jne  sound_loop
     jmp  frame_loop            ; Continue with the rest of the frame.
 
-!   ai   r2, >0010             ; Did we get a speech video?
+!   ai   r2, >0010             ; Did we get a speech frame?
     jlt  !
 
 * Play subsequent bytes of speech data.
-speech_loop                    ; Copy the video to the speech synthesizer.
+speech_loop                    ; Copy the frame to the speech synthesizer.
     movb *r1+, *r11            ;: d-
     dec  r2
     jne  speech_loop
@@ -237,6 +237,8 @@ code_end
     .error 'Cartridge code too large'
     .endif
 
+* Put the video data in subsequent banks after the code,
+* aligned to multiples of >2000.
     aorg >8000
     ;copy "../data/video.asm"
     bcopy "../data/video.tms"
