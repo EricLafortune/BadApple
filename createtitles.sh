@@ -15,7 +15,7 @@ convert \
   -fill white \
   -draw 'gravity Center font-size 50 text 0,-20 "Bad Apple"' \
   -draw 'gravity Center font-size 33 text 0,30 "on the TI-99/4A"' \
-  -draw 'gravity Center font-size 20 text 0,60 "Version 2.0"' \
+  -draw 'gravity Center font-size 20 text 0,60 "Version 2.1"' \
   +dither \
   $FRAME
 
