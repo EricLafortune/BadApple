@@ -69,7 +69,7 @@ if [[ -v EXIT ]]; then
   exit 1
 fi
 
-if [[ $1 == "ntsc" || $1 == "60" ]]; then
+if [[ $1 == "ntsc" ]]; then
   TARGET=ntsc
   FPS=60
 else
@@ -262,7 +262,7 @@ MUSIC_START=$[66*FPS/50]
 VOCALS_PART1_START=$[(1454-10)*FPS/50]
 VOCALS_PART2_START=$[(6332-37)*FPS/50]
 
-java ComposeVideo -${FPS}Hz \
+java ComposeVideo -$TARGET \
   $[0                                   ]:data/titles.zip \
   $[TITLES                              ]:$ANIMATION_ZIP \
   $[TITLES+MUSIC_START                  ]:$MUSIC_SND \

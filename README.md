@@ -22,8 +22,8 @@ You can watch the full [video](https://youtu.be/vx__aAdm4wQ) on Youtube.
 
 * Data: 4.5 MB in cartridge ROM.
 * Player code: 394 bytes of assembly (TMS990 processor).
-* Animation: 256x192 pixels at 25 fps (TMS9918 video processor).
-* Sound: chiptune at 50 fps (TMS9919/SN76489 sound processor).
+* Animation: 256x192 pixels at 25 fps or 30 fps (TMS9918 video processor).
+* Sound: chiptune at 50 fps or 60 fps (TMS9919/SN76489 sound processor).
 * Vocals: linear predictive coding at 40 fps (TMS5200 speech synthesizer).
 
 ## Requirements
@@ -71,9 +71,14 @@ You'll need to download the data files manually:
   [vocals](https://mega.nz/file/POpWDYCB#7mFaV6jeYKtcEG_rfZVc4UG7bv0rYwQpbWE4viNJdYg)
   as `data/BadAppleVocals.wav`.
 
-On Linux, you can then run the build script:
+On Linux, you can then run the build script.
+Building for a European 50Hz PAL system (the default):
 
-    ./build.sh
+    ./build.sh pal
+
+or building for a US 60Hz NTSC system:
+
+    ./build.sh ntsc
 
 Alternatively, you can run its commands manually.
 
@@ -86,12 +91,16 @@ You'll then have
 
 The easiest way is to use the Mame emulator (version 0.243 or higher).
 
-On Linux, you can run the script to launch Mame with the proper options:
+On Linux, you can run the script to launch Mame with the proper options.
+Emulating a European 50Hz PAL system (the default):
 
-    ./run.sh
+    ./run.sh pal
 
-Alternatively, you can run the Mame command manually. Remember that the
-demo targets a European system, with a display at 50 Hz.
+or emulating a US 60Hz NTSC system:
+
+    ./run.sh ntsc
+
+Alternatively, you can run the Mame command manually.
 
 Once Mame is running and showing the TI-99/4A home screen:
 
