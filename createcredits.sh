@@ -3,9 +3,9 @@
 # Create a credits animation for the Bad Apple demo,
 # using ImageMagick scripts.
 
-DIR=data/credits
+ZIP=${1:-data/credits.zip}
+DIR=${ZIP%.zip}
 FRAME=$DIR/099.pbm
-ZIP=$DIR.zip
 
 mkdir -p $DIR
 
@@ -62,3 +62,4 @@ rm -f "$ZIP"
 zip -q -j "$ZIP" $DIR/*.pbm
 
 rm -f $DIR/*.pbm
+rmdir $DIR

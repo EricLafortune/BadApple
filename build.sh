@@ -71,32 +71,47 @@ fi
 
 if [[ $1 == "ntsc" ]]; then
   TARGET=ntsc
-  FPS=60
+  VIDEO_FPS=59.922738
 else
   TARGET=pal
-  FPS=50
+  VIDEO_FPS=50.158969
 fi
 
 export CLASSPATH=videotools.jar
 
-ANIMATION_FPS=$[FPS/2]
-SOUND_FPS=$FPS
+# A function to evaluate mathematical expressions in floating point.
+function calc {
+  bc <<< "scale=4; $*"
+}
+
+# A function to evaluate mathematical expressions in floating point,
+# and return the result rounded to the nearest integer (non-negative).
+function calci {
+  bc <<< "scale=4; x=$* + 0.4999; scale=0; x / 1"
+}
+
+ANIMATION_FPS=$(calc "$VIDEO_FPS / 2")
+SOUND_FPS=$VIDEO_FPS
 SPEECH_FPS=40
 
-ANIMATION_MP4=data/BadApple_small_${ANIMATION_FPS}fps.mp4
-ANIMATION_ZIP=data/BadApple_small_${ANIMATION_FPS}fps.zip
+ANIMATION_MP4=data/BadApple_small_$TARGET.mp4
+ANIMATION_ZIP=data/BadApple_small_$TARGET.zip
 
-MUSIC_SND=data/music_simplified_${SOUND_FPS}fps.snd
+TITLES_ZIP=data/titles.zip
+CREDITS_ZIP=data/credits.zip
+POSTCREDITS_ZIP=data/postcredits.zip
 
-BAD_APPLE_RPK=out/BadApple_${TARGET}.rpk
+MUSIC_SND=data/music_simplified_$TARGET.snd
+
+BAD_APPLE_RPK=out/BadApple_$TARGET.rpk
 
 ###############################################################################
 # Animation.
 ###############################################################################
 
-./createtitles.sh
-./createcredits.sh
-./createpostcredits.sh
+./createtitles.sh      $TITLES_ZIP
+./createcredits.sh     $CREDITS_ZIP
+./createpostcredits.sh $POSTCREDITS_ZIP
 
 ffmpeg -i data/BadApple.webm \
   -y \
@@ -108,7 +123,7 @@ ffmpeg -i data/BadApple.webm \
 mkdir -p data/animation
 
 # Careful: extracting PBM frames without any processing introduces
-# spurious noise (in 3.4.8-0ubuntu0.2).
+# spurious noise (with ffmpeg 3.4.8-0ubuntu0.2).
 ffmpeg -i $ANIMATION_MP4 \
   -y \
   -f lavfi -i color=gray:s=256x192 \
@@ -123,27 +138,27 @@ zip -q --junk-paths $ANIMATION_ZIP \
 rm -r data/animation
 
 # Video:
-#   dur:   218.005 s = 5450 / 6542 frames (25 / 30 fps)
+#   dur:   218.005 s
 # Music:
-#   start:   1.315 s =   33 / ....       ->   66 / .... (50 / 60 fps)
-#   end:   217.010 s = 5425 / ....
-#   dur:   215.695 s = 5392 / .... frames
+#   start:   1.315 s
+#   end:   217.010 s
+#   dur:   215.695 s
 # Vocals:
 # Part 1:
-#   start:  29.100 s =  727 / ....       -> 1454 / ....
-#   end:   111.715 s = 2793 / ....
-#   dur:    82.615 s = 2066 / .... frames
+#   start:  29.100 s
+#   end:   111.715 s
+#   dur:    82.615 s
 # Part 2:
-#   start: 126.630 s = 3166 / ....       -> 6332 / ....
-#   end:   209.725 s = 5243 / ....
-#   dur:    83.095 s = 2077 / .... frames
+#   start: 126.630 s
+#   end:   209.725 s
+#   dur:    83.095 s
 
 ###############################################################################
 # Music.
 ###############################################################################
 
 # Stretch the music to a speed that matches the animation.
-java ConvertVgmToSnd $[813*50/SOUND_FPS] \
+java ConvertVgmToSnd $(calci "813 * 50 / $SOUND_FPS") \
    data/BadAppleMusic.vgm \
    data/music.snd
 
@@ -241,7 +256,7 @@ java ConvertTextToLpc \
 
 java TuneLpcFile \
   data/TI_HomeComputer.lpc \
-  data/music_simplified.snd,$[6332-66] \
+  data/music_simplified.snd,$(calci "(126.64 - 1.316) * $SOUND_FPS") \
   0.125 60 250 \
   data/TI_HomeComputer_tuned.lpc
 
@@ -249,18 +264,24 @@ java TuneLpcFile \
 # Combine animation, music, and vocals in a complete video.
 ###############################################################################
 
-# The lengths of the sections, expressed in frames (at 50 / 60 Hz).
-TITLES=$[125*2]
-ANIMATION=$[5450*FPS/50*2]
-CREDITS=$[300*2]
-POSTCREDITS=$[64*2]
+# The lengths of the sections, expressed in animation frames (at ~ 25 / 30 fps).
+TITLES_COUNT=$(     jar -tf $TITLES_ZIP      | wc -l)
+ANIMATION_COUNT=$(  jar -tf $ANIMATION_ZIP   | wc -l)
+CREDITS_COUNT=$(    jar -tf $CREDITS_ZIP     | wc -l)
+POSTCREDITS_COUNT=$(jar -tf $POSTCREDITS_ZIP | wc -l)
+
+# The lengths of the sections, expressed in video frames (at ~ 50 / 60 Hz).
+TITLES=$[     TITLES_COUNT      * 2]
+ANIMATION=$[  ANIMATION_COUNT   * 2]
+CREDITS=$[    CREDITS_COUNT     * 2]
+POSTCREDITS=$[POSTCREDITS_COUNT * 2]
 
 # The offsets of the music and vocals inside the main animation, expressed
-# in target frames (at 50Hz or 60Hz).
+# in target frames (at ~ 50 / 60 Hz).
 # Tweak for buffering and leading silence in the speech data.
-MUSIC_START=$[66*FPS/50]
-VOCALS_PART1_START=$[(1454-10)*FPS/50]
-VOCALS_PART2_START=$[(6332-37)*FPS/50]
+MUSIC_START=$(       calci "   1.315         * $VIDEO_FPS")
+VOCALS_PART1_START=$(calci "( 29.100 - 0.12) * $VIDEO_FPS")
+VOCALS_PART2_START=$(calci "(126.630 - 0.65) * $VIDEO_FPS")
 
 java ComposeVideo -$TARGET \
   $[0                                   ]:data/titles.zip \
@@ -288,4 +309,3 @@ zip -q --junk-paths \
   $BAD_APPLE_RPK \
   layout.xml \
   out/romc.bin
-

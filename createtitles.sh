@@ -3,9 +3,9 @@
 # Create a title animation for the Bad Apple demo,
 # using ImageMagick scripts.
 
-DIR=data/titles
+ZIP=${1:-data/titles.zip}
+DIR=${ZIP%.zip}
 FRAME=$DIR/000.pbm
-ZIP=$DIR.zip
 
 mkdir -p $DIR
 
@@ -41,4 +41,5 @@ rm -f "$ZIP"
 
 zip -q -j "$ZIP" $DIR/*.pbm
 
-#rm -f $DIR/*.pbm
+rm -f $DIR/*.pbm
+rmdir $DIR

@@ -3,9 +3,9 @@
 # Create a postcredits animation for the Bad Apple demo,
 # using ImageMagick scripts.
 
-DIR=data/postcredits
-FRAME=data/postcredits.png
-ZIP=$DIR.zip
+ZIP=${1:-data/postcredits.zip}
+DIR=${ZIP%.zip}
+FRAME=$DIR.png
 
 mkdir -p $DIR
 
@@ -25,3 +25,4 @@ rm -f "$ZIP"
 zip -q -j "$ZIP" $DIR/*.png
 
 rm -f $DIR/*.pbm
+rmdir $DIR
